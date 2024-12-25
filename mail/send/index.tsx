@@ -16,6 +16,7 @@ export default async function sendMail(
       html: html,
     });
   } catch (e) {
+    console.log(e)
     throw new Error("Email not sent");
   }
 }
