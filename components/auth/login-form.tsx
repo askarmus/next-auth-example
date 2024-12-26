@@ -11,6 +11,8 @@ import InputField from "./input-field";
 import EmailForm from "./email-form";
 import { useSearchParams } from "next/navigation";
 import { useActionState } from "react";
+ 
+
 export function LoginForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
@@ -23,7 +25,7 @@ export function LoginForm() {
     <Card className="mx-auto w-full max-w-md rounded-sm">
       <CardHeader>
         <CardTitle className="text-2xl flex justify-center">
-          <Image src={"/logo.png"} height={100} width={100} alt="logo" />
+          TalentBot
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -60,7 +62,7 @@ export function LoginForm() {
             {status?.status && <AlertMessage {...status} />}
           </form>
           <EmailForm />
-          <Providers />
+          {/* <Providers /> */}
         </div>
 
         <div className="mt-4 text-center text-sm">
