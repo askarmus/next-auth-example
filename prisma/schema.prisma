@@ -67,3 +67,17 @@ model VerificationToken {
  
   @@unique([identifier, token])
 }
+
+model Job {
+  id                     String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId                 String
+  jobTitle               String
+  description            String
+  questions              String[]  // Stored as a string array
+  totalApplication       Int       @default(0)
+  shortListedApplication Int       @default(0)
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+  status                 String    @default("open")
+  recordStatus           String    @default("active")
+}

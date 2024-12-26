@@ -1,3 +1,4 @@
+ 
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -20,7 +21,7 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default: "Next-Auth-Example",
+    default: "TalentBot",
     template: "%s-Next-Auth-Example",
   },
   description: "Example Of Authentication in next js using Next-auth",
