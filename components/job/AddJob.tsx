@@ -16,6 +16,7 @@ import {
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 
+
 interface JobFormData {
   jobTitle: string;
   description: string;
