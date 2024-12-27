@@ -1,21 +1,20 @@
-"use client";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import Image from "next/image";
-import { ReloadIcon } from "@radix-ui/react-icons";
-import { authenticate } from "@/lib/actions";
-import Providers from "@/components/auth/providers";
-import AlertMessage from "@/components/auth/alert";
-import InputField from "./input-field";
-import EmailForm from "./email-form";
-import { useSearchParams } from "next/navigation";
-import { useActionState } from "react";
- 
+'use client';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import Image from 'next/image';
+import { ReloadIcon } from '@radix-ui/react-icons';
+import { authenticate } from '@/lib/actions';
+import Providers from '@/components/auth/providers';
+import AlertMessage from '@/components/auth/alert';
+import InputField from './input-field';
+import EmailForm from './email-form';
+import { useSearchParams } from 'next/navigation';
+import { useActionState } from 'react';
 
 export function LoginForm() {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl");
+  const callbackUrl = searchParams.get('callbackUrl');
   const [status, dispatch, isPending] = useActionState(
     authenticate.bind(null, callbackUrl),
     undefined
@@ -30,7 +29,7 @@ export function LoginForm() {
       </CardHeader>
       <CardContent>
         <div className="grid gap-2">
-          <form action={dispatch} className={"flex flex-col gap-4"}>
+          <form action={dispatch} className={'flex flex-col gap-4'}>
             <InputField
               label="Email"
               type="email"
@@ -57,7 +56,7 @@ export function LoginForm() {
               {isPending && (
                 <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
               )}
-              {isPending ? "LoggingIn..." : "Login"}
+              {isPending ? 'LoggingIn...' : 'Login'}
             </Button>
             {status?.status && <AlertMessage {...status} />}
           </form>
@@ -66,7 +65,7 @@ export function LoginForm() {
         </div>
 
         <div className="mt-4 text-center text-sm">
-          Don&apos;t have an account?{" "}
+          Don&apos;t have an account?{' '}
           <Link href="/auth/register" className="underline">
             Sign up
           </Link>

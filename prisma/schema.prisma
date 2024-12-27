@@ -80,4 +80,5 @@ model Job {
   updatedAt              DateTime  @updatedAt
   status                 String    @default("open")
   recordStatus           String    @default("active")
+  experienceLevel        String    
 }
