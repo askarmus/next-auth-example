@@ -5,23 +5,21 @@ import { useForm, useFieldArray, SubmitHandler } from 'react-hook-form'
 import axios from 'axios'
 import {
     TextField,
-    Button,
-    Typography,
     Box,
-    CircularProgress,
     IconButton,
-    Tooltip,
-    Alert,
     FormControl,
-    FormLabel,
     RadioGroup,
     FormControlLabel,
     Radio,
 } from '@mui/material'
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
 import { ExperienceLevel } from '@/lib/enum/experience.level'
 import Image from 'next/image'
+import { useSession } from 'next-auth/react'
+import { useSnackbar } from '@/lib/service/SnackbarService'
+import AdminButton from '../Btn'
+import AddIcon from '@mui/icons-material/Add'
+
 interface JobFormData {
     jobTitle: string
     description: string
@@ -39,7 +37,7 @@ const AddJob: React.FC = () => {
         getValues,
         formState: { errors },
     } = useForm<JobFormData>({
-        defaultValues: { questions: [], status: 'open', expereinceLevel: '' }, // Default value for status
+        defaultValues: { questions: [], status: 'open', expereinceLevel: '' },
     })
 
     const { fields, append, remove, replace } = useFieldArray({
@@ -48,23 +46,23 @@ const AddJob: React.FC = () => {
     })
 
     const [isLoadingQuestions, setIsLoadingQuestions] = useState(false)
-    const [error, setError] = useState<string | null>(null)
+    const [isSubmiting, setSubmiting] = useState(false)
     const [selectedExperience, setSelectedExperience] = useState<
         ExperienceLevel | undefined
     >(undefined)
+    const { data: session } = useSession()
+    const { showSuccess, showError } = useSnackbar()
+    const [questionError, setQuestionError] = useState<string | null>(null)
 
     const fetchQuestions = async () => {
         const jobTitle = getValues('jobTitle')
         const description = getValues('description')
 
         if (!jobTitle || !description || !selectedExperience) {
-            setError(
-                'Please fill in Job Title, Description, and Years of Experience before generating questions.'
-            )
+            showError('Please fill in Job Title, Description, and job level')
             return
         }
 
-        setError(null)
         setIsLoadingQuestions(true)
 
         try {
@@ -82,35 +80,45 @@ const AddJob: React.FC = () => {
             if (questions && questions.length) {
                 replace(questions.map((q: string) => ({ value: q }))) // Map each question into an object with `value`
             } else {
-                setError('No questions were generated. Please try again.')
+                showError('No questions were generated. Please try again.')
             }
         } catch (error: unknown) {
             console.error('Error generating questions:', error)
-            setError('Failed to generate questions. Please try again.')
+            showError('Failed to generate questions. Please try again.')
         } finally {
             setIsLoadingQuestions(false)
         }
     }
 
     const onSubmit: SubmitHandler<JobFormData> = async (data) => {
+        setQuestionError(
+            !data.questions || data.questions.length === 0
+                ? 'Please add at least one question.'
+                : null
+        )
+        if (!data.questions || data.questions.length === 0) return
+
         try {
-            data.expereinceLevel = selectedExperience?.toString()
-            const response = await axios.post('/api/job', data) // `status` will always be "open" here
-            console.log('Job created:', response.data)
-            console.log('Job datadatadatadatadatadatadatadatadatadata:', data)
+            const transformedData = {
+                ...data,
+                userId: session?.user?.id || '',
+                questions: data.questions.map((q) => q.value),
+                experienceLevel: selectedExperience?.toString(),
+            }
+            setSubmiting(true)
+            const response = await axios.post('/api/job', transformedData)
+            showSuccess('Job has been created successfully.')
+            setSubmiting(false)
+
             reset()
         } catch (error: unknown) {
             console.error('Failed to create job', error)
+            setSubmiting(false)
         }
     }
 
     return (
         <Box p={4}>
-            {error && (
-                <Alert severity="error" style={{ marginBottom: '16px' }}>
-                    {error}
-                </Alert>
-            )}
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Box mb={3}>
                     <TextField
@@ -167,15 +175,22 @@ const AddJob: React.FC = () => {
                             <span>Generate question using AI</span>
                         </div>
                         <div className="flex-grow border-b sm:border-b-0 sm:border-r border-gray-200 pb-4 sm:pb-0 sm:pr-4">
-                            <FormControl>
+                            <FormControl
+                                error={!!errors.expereinceLevel}
+                                component="fieldset"
+                            >
                                 <RadioGroup
                                     row
                                     value={selectedExperience || ''}
-                                    onChange={(e) =>
-                                        setSelectedExperience(
-                                            e.target.value as ExperienceLevel
-                                        )
-                                    }
+                                    {...register('expereinceLevel', {
+                                        required:
+                                            'Please select an experience level.',
+                                        onChange: (e) =>
+                                            setSelectedExperience(
+                                                e.target
+                                                    .value as ExperienceLevel
+                                            ),
+                                    })}
                                 >
                                     {Object.values(ExperienceLevel).map(
                                         (level) => (
@@ -188,21 +203,23 @@ const AddJob: React.FC = () => {
                                         )
                                     )}
                                 </RadioGroup>
+                                {errors.expereinceLevel && (
+                                    <span style={{ color: 'red' }}>
+                                        {errors.expereinceLevel.message}
+                                    </span>
+                                )}
                             </FormControl>
                         </div>
                         <div className="w-full sm:w-auto pt-4 sm:pt-0">
-                            <Button
-                                variant="contained"
-                                color="primary"
+                            <AdminButton
+                                variant="outlined"
                                 onClick={fetchQuestions}
-                                disabled={isLoadingQuestions}
+                                loading={isLoadingQuestions}
                             >
-                                {isLoadingQuestions ? (
-                                    <CircularProgress size={24} />
-                                ) : (
-                                    'Generate Questions'
-                                )}
-                            </Button>
+                                {isLoadingQuestions
+                                    ? 'Generating...'
+                                    : 'Generate Questions'}
+                            </AdminButton>
                         </div>
                     </div>
                 </div>
@@ -215,35 +232,42 @@ const AddJob: React.FC = () => {
                         alignItems="center"
                         gap={2}
                     >
-                        <Tooltip title={`Question ${index + 1}`} arrow>
-                            <TextField
-                                fullWidth
-                                {...register(`questions.${index}.value`, {
-                                    required: true,
-                                })}
-                                defaultValue={field.value}
-                                variant="outlined"
-                            />
-                        </Tooltip>
+                        <TextField
+                            fullWidth
+                            {...register(`questions.${index}.value`, {
+                                required: true,
+                            })}
+                            defaultValue={field.value}
+                            variant="outlined"
+                        />
+
                         <IconButton onClick={() => remove(index)} color="error">
                             <RemoveCircleOutlineIcon />
                         </IconButton>
                     </Box>
                 ))}
+                <Box mt={4}>
+                    <AdminButton
+                        variant="outlined"
+                        icon={<AddIcon />}
+                        onClick={() => {
+                            append({ value: '' })
+                            setQuestionError(null)
+                        }}
+                    >
+                        Add Question
+                    </AdminButton>
 
-                <Button
-                    variant="outlined"
-                    startIcon={<AddCircleOutlineIcon />}
-                    onClick={() => append({ value: '' })}
-                    color="success"
-                >
-                    Add Question
-                </Button>
-
+                    {questionError && (
+                        <p style={{ color: 'red', marginTop: '8px' }}>
+                            {questionError}
+                        </p>
+                    )}
+                </Box>
                 <Box mt={4} display="flex" justifyContent="flex-end">
-                    <Button type="submit" variant="contained" color="primary">
-                        Submit
-                    </Button>
+                    <AdminButton type="submit" loading={isSubmiting}>
+                        {isSubmiting ? 'Saving...' : 'Save'}
+                    </AdminButton>
                 </Box>
             </form>
         </Box>

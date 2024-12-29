@@ -67,18 +67,31 @@ model VerificationToken {
  
   @@unique([identifier, token])
 }
-
 model Job {
-  id                     String    @id @default(auto()) @map("_id") @db.ObjectId
+  id                     String           @id @default(auto()) @map("_id") @db.ObjectId
   userId                 String
   jobTitle               String
   description            String
-  questions              String[]  // Stored as a string array
-  totalApplication       Int       @default(0)
-  shortListedApplication Int       @default(0)
-  createdAt              DateTime  @default(now())
-  updatedAt              DateTime  @updatedAt
-  status                 String    @default("open")
-  recordStatus           String    @default("active")
-  experienceLevel        String    
+  questions              String[]         // Stored as a string array
+  totalApplication       Int              @default(0)
+  shortListedApplication Int              @default(0)
+  createdAt              DateTime         @default(now())
+  updatedAt              DateTime         @updatedAt
+  status                 String           @default("open") // Can be "open", "completed", "uncompleted"
+  recordStatus           String           @default("active")
+  experienceLevel        String
+  sentInvitations        SentInvitation[] @relation("JobToSentInvitation") // Explicit relation name
+}
+
+model SentInvitation {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  jobId    String
+  name     String    
+  email    String
+  userId   String
+  message  String   // Invitation message
+  status   String   @default("Pending") // Can be "Pending", "Open", "Completed", "Uncompleted"
+  sentOn   DateTime @default(now())
+  expires  DateTime // Expiry date of the invitation
+  job      Job      @relation("JobToSentInvitation", fields: [jobId], references: [id]) // Explicit relation name
 }

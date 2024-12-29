@@ -1,11 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server'
-import {
-    createJobSchema,
-    updateJobSchema,
-    jobResponseSchema,
-} from '@/app/schemas/jobSchema'
+import { NextResponse } from 'next/server'
+import { createJobSchema, jobResponseSchema } from '@/app/schemas/jobSchema'
 import { z } from 'zod'
-import { Prisma } from '@prisma/client' // Import Prisma namespace
 import { prisma } from '@/lib/db'
 
 // GET /api/job - List jobs with pagination and exclude soft-deleted records
@@ -52,7 +47,7 @@ export async function POST(request: Request) {
                 ...parsed,
                 totalApplication: 0,
                 shortListedApplication: 0,
-                recordStatus: 'active', // Ensure the job is active upon creation
+                recordStatus: 'active',
             },
         })
 
