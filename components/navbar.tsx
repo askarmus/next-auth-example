@@ -47,7 +47,7 @@ const Navbar: React.FC = () => {
                             <HomeIcon fontSize="small"> </HomeIcon> Dashboards
                         </li>
                         <li className="dropdown active text-gray-300">
-                            <Link href="/dashboard/job">
+                            <Link href="/admin/job">
                                 <WorkIcon fontSize="small"></WorkIcon> Jobs
                             </Link>
                         </li>

@@ -46,7 +46,7 @@ export async function authenticate(
         await signIn('credentials', {
             email,
             password,
-            redirectTo: callbackUrl || '/dashboard/job',
+            redirectTo: callbackUrl || '/admin/job',
         })
         return {
             status: 'success',
@@ -458,7 +458,7 @@ export async function connectProvider(
     try {
         const provider = formData.get('provider') as BuiltInProviderType
         return await signIn(provider, {
-            redirectTo: '/dashboard/settings',
+            redirectTo: '/admin/settings',
         })
     } catch (e) {
         if (e instanceof AuthError) {

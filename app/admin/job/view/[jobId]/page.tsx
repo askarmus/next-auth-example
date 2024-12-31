@@ -101,7 +101,7 @@ const JobViewPage: React.FC = () => {
                 title={job.jobTitle}
                 breadcrumb="Dashaborad / Job / View"
                 buttonText="Back"
-                buttonLink="/dashboard/job"
+                buttonLink="/admin/job"
             />
             <div className="bg-white dark:bg-gray-800 rounded-lg p-5 mb-6 h-full p-5">
                 <h3 className="text-lg font-semibold mb-4">Job Description</h3>

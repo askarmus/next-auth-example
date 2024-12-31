@@ -11,7 +11,7 @@ const JobPage: React.FC = () => {
                 title="Jobs"
                 breadcrumb="Dashaborad / Job / List"
                 buttonText="Add new job +"
-                buttonLink="/dashboard/job/new"
+                buttonLink="/admin/job/new"
             />
             <div className="bg-white dark:bg-gray-800 rounded-lg p-10 mb-6 h-full p-5">
                 <JobList />
