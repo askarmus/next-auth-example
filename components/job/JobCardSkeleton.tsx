@@ -10,10 +10,13 @@ export default function JobCardSkeleton() {
                         <div className="h-6 w-16 bg-yellow-100 rounded-md"></div>
                         {/* Posted date */}
                         <div className="h-6 w-48 bg-gray-200 rounded-md border border-gray-300"></div>
+                        <div className="h-6 w-48 bg-gray-200 rounded-md border border-gray-300"></div>
                     </div>
                     {/* Application count */}
                     <div className="flex items-center gap-2">
                         <div className="h-5 w-24 bg-gray-200 rounded-md"></div>
+                        <div className="h-5 w-4 bg-gray-200 rounded-md"></div>
+                        <div className="h-5 w-4 bg-gray-200 rounded-md"></div>
                         <div className="h-5 w-4 bg-gray-200 rounded-md"></div>
                     </div>
                 </div>

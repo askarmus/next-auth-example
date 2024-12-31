@@ -22,9 +22,9 @@ const PageHeader: React.FC<HeaderProps> = ({
                         <div>
                             <div className="flex flex-wrap justify-between">
                                 <div className="items-center">
-                                    <h1 className="font-semibold text-xl mb-1 block dark:text-slate-100">
+                                    <p className="text-gray-800 dark:text-gray-100 font-bold  mb-1 block text-3xl	">
                                         {title}
-                                    </h1>
+                                    </p>
                                     <ol className="list-reset flex text-sm">
                                         {breadcrumb
                                             .split(' / ')
@@ -72,7 +72,7 @@ const PageHeader: React.FC<HeaderProps> = ({
                                 <div className="flex items-center">
                                     <Link
                                         href={buttonLink}
-                                        className="px-3 py-2 lg:px-4 bg-blue-500 text-white text-sm font-semibold rounded hover:bg-blue-600"
+                                        className="px-3 py-2 lg:px-4 bg-[rgb(17_24_39)] rounded-md text-white text-sm font-semibold rounded hover:bg-blue-600"
                                     >
                                         {buttonText}
                                     </Link>

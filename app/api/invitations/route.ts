@@ -27,7 +27,7 @@ export async function POST(request: Request) {
                 email: data.email,
                 message: data.message!,
                 expires: new Date(data.expires),
-                status: 'pending',
+                status: 'scheduled ',
                 sentOn: new Date(),
             },
         })
