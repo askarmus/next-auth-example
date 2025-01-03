@@ -26,27 +26,6 @@ const JobViewPage: React.FC = () => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
 
-    const invitations = [
-        {
-            name: 'fsdfds',
-            email: 'askarmus@hotmail.com',
-            status: 'pending',
-            expires: '1/11/2025, 11:13:59 PM',
-        },
-        {
-            name: 'fsdfds',
-            email: 'askarmus@hotmail.com',
-            status: 'pending',
-            expires: '1/11/2025, 11:18:09 PM',
-        },
-        {
-            name: 'Askar Stokes Musthaffa',
-            email: 'askarmus@hotmail.com',
-            status: 'pending',
-            expires: '12/31/2024, 11:47:27 PM',
-        },
-    ]
-
     useEffect(() => {
         if (!jobId) return
 
@@ -54,7 +33,7 @@ const JobViewPage: React.FC = () => {
             try {
                 setLoading(true)
                 const response = await axios.get(
-                    `/api/job/${jobId}?id=${jobId}`
+                    `/api/job/view/${jobId}?id=${jobId}`
                 )
                 setJob(response.data)
             } catch (err: any) {
