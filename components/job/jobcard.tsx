@@ -65,6 +65,7 @@ const JobCard: FC<any> = ({
                         >
                             View
                         </Link>
+
                         <button
                             onClick={toggleDrawer(true)}
                             className="focus:outline-none focus:bg-opacity-50 focus:text-black hover:text-black focus:ring-2 

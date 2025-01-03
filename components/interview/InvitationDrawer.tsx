@@ -7,6 +7,7 @@ import {
     FormHelperText,
     ListSubheader,
     TextField,
+    Link,
 } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
@@ -273,6 +274,7 @@ const InvitationDrawer: React.FC<InvitationDrawerProps> = ({
                             <th className="border border-gray-300 p-2 text-left">
                                 Sent On
                             </th>
+                            <th className="border border-gray-300 p-2 text-left"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -294,6 +296,17 @@ const InvitationDrawer: React.FC<InvitationDrawerProps> = ({
                                     {new Date(
                                         invitation.sentOn
                                     ).toLocaleString()}
+                                </td>
+                                <td>
+                                    <Link
+                                        className="focus:outline-none focus:bg-opacity-50 focus:text-black hover:text-black focus:ring-2 
+                              focus:ring-offset-2 focus:ring-indigo-700 text-indigo-700 hover:bg-opacity-50 bg-gray-100 text-sm 
+                              font-medium py-2 px-3 w-full rounded mr-3"
+                                        href={`/interview/start/${invitation.id}`}
+                                        target="_blank"
+                                    >
+                                        Start
+                                    </Link>
                                 </td>
                             </tr>
                         ))}

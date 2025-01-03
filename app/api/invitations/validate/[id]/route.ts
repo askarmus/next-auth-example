@@ -24,22 +24,22 @@ export async function GET(request: Request, { params }: PageProps) {
         }
 
         // Check expiration and status
-        const now = new Date()
-        if (invitation.expires < now) {
-            return NextResponse.json(
-                { error: 'The invitation has expired.' },
-                { status: 400 }
-            )
-        }
+        // const now = new Date()
+        // if (invitation.expires < now) {
+        //     return NextResponse.json(
+        //         { error: 'The invitation has expired.' },
+        //         { status: 400 }
+        //     )
+        // }
 
-        if (invitation.status !== 'scheduled') {
-            return NextResponse.json(
-                {
-                    error: `The invitation is already ${invitation.status.toLowerCase()}.`,
-                },
-                { status: 400 }
-            )
-        }
+        // if (invitation.status !== 'scheduled') {
+        //     return NextResponse.json(
+        //         {
+        //             error: `The invitation is already ${invitation.status.toLowerCase()}.`,
+        //         },
+        //         { status: 400 }
+        //     )
+        // }
 
         // Return a custom response with only required fields
         return NextResponse.json({
